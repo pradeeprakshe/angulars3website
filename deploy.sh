@@ -1,0 +1,1 @@
+aws --profile=v_textract s3 sync ./dist/verdethos-frontend/ s3://verdethos-frontend-dev

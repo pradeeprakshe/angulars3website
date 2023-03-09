@@ -1,0 +1,80 @@
+<section class="relative mb-5">
+    <div class="absolute h-60 w-full bg-[url('assets/bg-tile.png')] z-0"></div>
+    <div class="px-10 py-4 z-10 relative text-sm">
+        <span class="text-[#969d52] hover:cursor-pointer">Documents</span>
+        <span class="text-white"> > </span>
+        <span class="text-white hover:cursor-pointer">Scan</span>
+    </div>
+
+    <div *ngIf="!analysis"
+        class="w-full h-auto relative bg-white z-10 mx-auto rounded-2xl mt-2 drop-shadow-xl px-5 py-10 md:w-1/2 lg:w-2/5 md:px-8 lg:px-10 xl:px-20">
+        <p class="text-center font-medium text-2xl">Add Document</p>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <select formControlName="contract"
+                class="px-4 py-3 rounded-md w-full mt-10 border-slate-200 text-gray-500 font-light text-sm">
+                <option disabled value="">Document Type</option>
+                <option *ngFor="let option of contracts" [value]="option.value">{{option.label}}</option>
+            </select>
+            <span *ngIf="form.get('contract')?.invalid && form.get('contract')?.touched" class="text-sm text-red-600">
+                The document type is required</span>
+
+            <select formControlName="type"
+                class="px-4 py-3 rounded-md w-full mt-5 border-slate-200 text-gray-500 font-light text-sm">
+                <option disabled value="">Template</option>
+                <option *ngFor="let option of types" [value]="option.value">{{option.label}}</option>
+            </select>
+            <span *ngIf="form.get('type')?.invalid && form.get('type')?.touched" class="text-sm text-red-600">
+                The template is required </span>
+
+            <div class="mt-5">
+                <p class="font-light text-sm text-gray-500">Upload File:</p>
+                <div
+                    appDragDropFile
+                    (fileDropped)="fileDropped($event)"
+                    class="border-dashed border-2 rounded-2xl border-slate-500 w-full h-48 mt-3 bg-blue-50 flex items-center justify-center">
+                    <div class="text-gray-500 font-light text-sm">
+                        <img src="assets/icons8-happy-file-48.png" class="w-6 block mx-auto" alt="">
+                        <ng-container *ngIf="!selectedFile">
+                            <p class="mt-1 text-center">Drop your documents here, or select from your computer</p>
+                            <p class="mt-1 text-center text-[#969d52] hover:cursor-pointer" (click)="openFileHandler()">
+                                Click to browse</p>
+                        </ng-container>
+                        <ng-container *ngIf="selectedFile">
+                            <p class="mt-1 text-center">{{getFileName()}}</p>
+                        </ng-container>
+                        <input #file type="file" accept="application/pdf" (change)="fileSelected($event)" class="hidden">
+                    </div>
+                </div>
+                <span *ngIf="fileTouched && !selectedFile" class="text-sm text-red-600"> The document is required</span>
+            </div>
+            <div class="mt-12 flex space-x-4 justify-end">
+                <button type="submit"
+                    class="px-16 py-4 rounded-md bg-[#969d52] rounder-xl font-light text-sm text-white">
+                    <ng-container *ngIf="submitting">
+                        <svg aria-hidden="true" class="inline w-4 h-4 mr-2 text-white animate-spin fill-slate-800" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg> Scanning...
+                    </ng-container>
+                    <ng-container *ngIf="!submitting">
+                        Scan
+                    </ng-container>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="analysis"
+        class="mt-5 w-full h-auto relative bg-white z-10 mx-auto rounded-2xl drop-shadow-xl px-5 py-10 md:w-1/2  md:px-8 lg:px-10 xl:px-10">
+        <p class="text-center font-medium text-2xl mb-8">Document Details</p>
+        <div class="columns-2">
+            <div *ngFor="let value of values" class="mb-5">
+                <p class="font-medium text-blue-900">{{value.label}}</p>
+                <p class="font-thin text-gray-700">{{value.value}}</p>
+            </div>
+        </div>
+        <div class="mt-12 flex space-x-4 justify-end">
+            <button class="px-8 py-4 rounded-md font-light text-sm bg-[#969d52] text-white" (click)="cancel()">Ok</button>
+        </div>
+    </div>
+</section>
