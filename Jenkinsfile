@@ -18,12 +18,13 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+                sh 'export NG_CLI_ANALYTICS=ci'
             }
         }
         
         stage('Build') {
             steps {
-                sh 'npm run'
+                sh 'sudo npm run'
             }
         }
         
