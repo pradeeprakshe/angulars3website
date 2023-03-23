@@ -28,12 +28,12 @@ pipeline {
             }
         }
         
-//         stage('Deploy to S3') {
-//             steps {
-//                 withAWS(credentials: 'BuildAngularDeployS3_AWS_Credentials', region: 'us-east-1') {
-//                     s3Upload(bucket: 'angulars3webistetest01', path: '/', file: '/var/lib/jenkins/workspace/BuildAngularDeployS3/dist/*')
-//                 }
-//             }
-//         }
+        stage('Deploy to S3') {
+            steps {
+                withAWS(credentials: 'BuildAngularDeployS3_AWS_Credentials', region: 'us-east-1') {
+                    s3Upload(bucket: 'angulars3webistetest01', path: '/', file: '/var/lib/jenkins/workspace/BuildAngularDeployS3/dist/*')
+                }
+            }
+        }
     }
 }
