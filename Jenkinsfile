@@ -24,7 +24,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'npm run build --no-analytics'
+                sh 'sudo npm run build --no-analytics --no-interactive'
             }
         }
         
