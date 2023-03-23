@@ -32,7 +32,7 @@ pipeline {
             steps {
                 withAWS(credentials: 'BuildAngularDeployS3_AWS_Credentials', region: 'us-east-1') {
 //                     s3Upload(bucket: 'angulars3webistetest01', path: '.', file: 'dist/')
-                       s3Upload(bucket: 'angulars3webistetest01', file: 'dist/')
+                       s3Upload(bucket: 'angulars3webistetest01', file: 'dist/verdethos-frontend/')
 
 //                   sh 'aws s3 cp /var/lib/jenkins/workspace/BuildAngularDeployS3/dist/verdethos-frontend/ s3://angulars3webistetest01 --recursive'
                 }
