@@ -24,7 +24,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'sudo npm run'
+                sh 'npm run'
             }
         }
         
